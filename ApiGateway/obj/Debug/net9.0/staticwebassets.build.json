@@ -1,0 +1,362 @@
+{
+  "Version": 1,
+  "Hash": "oC/jNm41nl/aF/vAS5b+lYZ7V0z1Y2qp2jtVWHlVEOo=",
+  "Source": "ApiGateway",
+  "BasePath": "_content/ApiGateway",
+  "Mode": "Default",
+  "ManifestType": "Build",
+  "ReferencedProjectsConfiguration": [],
+  "DiscoveryPatterns": [
+    {
+      "Name": "ApiGateway\\wwwroot",
+      "Source": "ApiGateway",
+      "ContentRoot": "D:\\DayUsers\\LakshayKumar\\Projects\\POCs\\GrpcMicroservices\\ApiGateway\\wwwroot\\",
+      "BasePath": "_content/ApiGateway",
+      "Pattern": "**"
+    }
+  ],
+  "Assets": [
+    {
+      "Identity": "D:\\DayUsers\\LakshayKumar\\Projects\\POCs\\GrpcMicroservices\\ApiGateway\\obj\\Debug\\net9.0\\compressed\\0ybow3j3as-e7m5ywci8u.gz",
+      "SourceId": "ApiGateway",
+      "SourceType": "Discovered",
+      "ContentRoot": "D:\\DayUsers\\LakshayKumar\\Projects\\POCs\\GrpcMicroservices\\ApiGateway\\obj\\Debug\\net9.0\\compressed\\",
+      "BasePath": "_content/ApiGateway",
+      "RelativePath": "index#[.{fingerprint=e7m5ywci8u}]?.html.gz",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Alternative",
+      "AssetMergeBehavior": "",
+      "AssetMergeSource": "",
+      "RelatedAsset": "D:\\DayUsers\\LakshayKumar\\Projects\\POCs\\GrpcMicroservices\\ApiGateway\\wwwroot\\index.html",
+      "AssetTraitName": "Content-Encoding",
+      "AssetTraitValue": "gzip",
+      "Fingerprint": "l7m4sfifem",
+      "Integrity": "j540wh6bLvu4hrE7kNRe39MFJzxwNSYLLRsOG/MTCdI=",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "D:\\DayUsers\\LakshayKumar\\Projects\\POCs\\GrpcMicroservices\\ApiGateway\\wwwroot\\index.html"
+    },
+    {
+      "Identity": "D:\\DayUsers\\LakshayKumar\\Projects\\POCs\\GrpcMicroservices\\ApiGateway\\wwwroot\\index.html",
+      "SourceId": "ApiGateway",
+      "SourceType": "Discovered",
+      "ContentRoot": "D:\\DayUsers\\LakshayKumar\\Projects\\POCs\\GrpcMicroservices\\ApiGateway\\wwwroot\\",
+      "BasePath": "_content/ApiGateway",
+      "RelativePath": "index#[.{fingerprint}]?.html",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "AssetMergeBehavior": "",
+      "AssetMergeSource": "",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "Fingerprint": "e7m5ywci8u",
+      "Integrity": "qiFld3vz2egMhq8azlPzYDxK+hNeWv0Cid4Hpmw+LlM=",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\index.html"
+    }
+  ],
+  "Endpoints": [
+    {
+      "Route": "index.e7m5ywci8u.html",
+      "AssetFile": "D:\\DayUsers\\LakshayKumar\\Projects\\POCs\\GrpcMicroservices\\ApiGateway\\obj\\Debug\\net9.0\\compressed\\0ybow3j3as-e7m5ywci8u.gz",
+      "Selectors": [
+        {
+          "Name": "Content-Encoding",
+          "Value": "gzip",
+          "Quality": "0.000174733531"
+        }
+      ],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "5722"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"j540wh6bLvu4hrE7kNRe39MFJzxwNSYLLRsOG/MTCdI=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Thu, 09 Jul 2026 05:57:20 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "max-age=31536000, immutable"
+        },
+        {
+          "Name": "Content-Encoding",
+          "Value": "gzip"
+        },
+        {
+          "Name": "Vary",
+          "Value": "Content-Encoding"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "text/html"
+        },
+        {
+          "Name": "ETag",
+          "Value": "W/\"qiFld3vz2egMhq8azlPzYDxK+hNeWv0Cid4Hpmw+LlM=\""
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "fingerprint",
+          "Value": "e7m5ywci8u"
+        },
+        {
+          "Name": "label",
+          "Value": "index.html"
+        },
+        {
+          "Name": "integrity",
+          "Value": "sha256-qiFld3vz2egMhq8azlPzYDxK+hNeWv0Cid4Hpmw+LlM="
+        }
+      ]
+    },
+    {
+      "Route": "index.e7m5ywci8u.html",
+      "AssetFile": "D:\\DayUsers\\LakshayKumar\\Projects\\POCs\\GrpcMicroservices\\ApiGateway\\wwwroot\\index.html",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "30093"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "text/html"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"qiFld3vz2egMhq8azlPzYDxK+hNeWv0Cid4Hpmw+LlM=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Thu, 09 Jul 2026 05:57:20 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "max-age=31536000, immutable"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "fingerprint",
+          "Value": "e7m5ywci8u"
+        },
+        {
+          "Name": "label",
+          "Value": "index.html"
+        },
+        {
+          "Name": "integrity",
+          "Value": "sha256-qiFld3vz2egMhq8azlPzYDxK+hNeWv0Cid4Hpmw+LlM="
+        }
+      ]
+    },
+    {
+      "Route": "index.e7m5ywci8u.html.gz",
+      "AssetFile": "D:\\DayUsers\\LakshayKumar\\Projects\\POCs\\GrpcMicroservices\\ApiGateway\\obj\\Debug\\net9.0\\compressed\\0ybow3j3as-e7m5ywci8u.gz",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "5722"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "text/html"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"j540wh6bLvu4hrE7kNRe39MFJzxwNSYLLRsOG/MTCdI=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Thu, 09 Jul 2026 05:57:20 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "max-age=31536000, immutable"
+        },
+        {
+          "Name": "Content-Encoding",
+          "Value": "gzip"
+        },
+        {
+          "Name": "Vary",
+          "Value": "Content-Encoding"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "fingerprint",
+          "Value": "e7m5ywci8u"
+        },
+        {
+          "Name": "label",
+          "Value": "index.html.gz"
+        },
+        {
+          "Name": "integrity",
+          "Value": "sha256-j540wh6bLvu4hrE7kNRe39MFJzxwNSYLLRsOG/MTCdI="
+        }
+      ]
+    },
+    {
+      "Route": "index.html",
+      "AssetFile": "D:\\DayUsers\\LakshayKumar\\Projects\\POCs\\GrpcMicroservices\\ApiGateway\\obj\\Debug\\net9.0\\compressed\\0ybow3j3as-e7m5ywci8u.gz",
+      "Selectors": [
+        {
+          "Name": "Content-Encoding",
+          "Value": "gzip",
+          "Quality": "0.000174733531"
+        }
+      ],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "5722"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"j540wh6bLvu4hrE7kNRe39MFJzxwNSYLLRsOG/MTCdI=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Thu, 09 Jul 2026 05:57:20 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "no-cache"
+        },
+        {
+          "Name": "Content-Encoding",
+          "Value": "gzip"
+        },
+        {
+          "Name": "Vary",
+          "Value": "Content-Encoding"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "text/html"
+        },
+        {
+          "Name": "ETag",
+          "Value": "W/\"qiFld3vz2egMhq8azlPzYDxK+hNeWv0Cid4Hpmw+LlM=\""
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "integrity",
+          "Value": "sha256-qiFld3vz2egMhq8azlPzYDxK+hNeWv0Cid4Hpmw+LlM="
+        }
+      ]
+    },
+    {
+      "Route": "index.html",
+      "AssetFile": "D:\\DayUsers\\LakshayKumar\\Projects\\POCs\\GrpcMicroservices\\ApiGateway\\wwwroot\\index.html",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "30093"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "text/html"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"qiFld3vz2egMhq8azlPzYDxK+hNeWv0Cid4Hpmw+LlM=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Thu, 09 Jul 2026 05:57:20 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "no-cache"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "integrity",
+          "Value": "sha256-qiFld3vz2egMhq8azlPzYDxK+hNeWv0Cid4Hpmw+LlM="
+        }
+      ]
+    },
+    {
+      "Route": "index.html.gz",
+      "AssetFile": "D:\\DayUsers\\LakshayKumar\\Projects\\POCs\\GrpcMicroservices\\ApiGateway\\obj\\Debug\\net9.0\\compressed\\0ybow3j3as-e7m5ywci8u.gz",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "5722"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "text/html"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"j540wh6bLvu4hrE7kNRe39MFJzxwNSYLLRsOG/MTCdI=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Thu, 09 Jul 2026 05:57:20 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "no-cache"
+        },
+        {
+          "Name": "Content-Encoding",
+          "Value": "gzip"
+        },
+        {
+          "Name": "Vary",
+          "Value": "Content-Encoding"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "integrity",
+          "Value": "sha256-j540wh6bLvu4hrE7kNRe39MFJzxwNSYLLRsOG/MTCdI="
+        }
+      ]
+    }
+  ]
+}

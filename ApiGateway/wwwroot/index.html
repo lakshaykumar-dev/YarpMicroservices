@@ -1,0 +1,818 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Microservices Dashboard</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-gradient: #f8fafc;
+            --card-bg: #ffffff;
+            --card-border: #e2e8f0;
+            --primary: #3b82f6;
+            --primary-gradient: linear-gradient(135deg, #3b82f6, #2563eb);
+            --text-main: #0f172a;
+            --text-muted: #64748b;
+            --code-bg: #f1f5f9;
+            --active-glow: 0 0 20px rgba(59, 130, 246, 0.3);
+        }
+
+        body {
+            margin: 0;
+            font-family: 'Inter', sans-serif;
+            background: var(--bg-gradient);
+            color: var(--text-main);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 40px 20px;
+            overflow-x: hidden;
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            font-weight: 800;
+            margin-bottom: 10px;
+            text-align: center;
+            color: var(--text-main);
+        }
+
+        p.subtitle {
+            color: var(--text-muted);
+            margin-bottom: 30px;
+            font-size: 1.1rem;
+            text-align: center;
+        }
+
+        /* --- Architecture Diagram Styles --- */
+        .architecture-diagram {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+            max-width: 1000px;
+            margin-bottom: 20px;
+            padding: 30px;
+            background: #ffffff;
+            border-radius: 20px;
+            border: 1px solid var(--card-border);
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+        }
+
+        .node {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px;
+            background: #f8fafc;
+            border: 2px solid var(--card-border);
+            border-radius: 15px;
+            width: 140px;
+            text-align: center;
+            transition: all 0.3s ease;
+            position: relative;
+            z-index: 2;
+        }
+
+        .node .icon {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+
+        .node .name {
+            font-weight: 600;
+            font-size: 0.95rem;
+        }
+        
+        .node .detail {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            margin-top: 5px;
+            font-family: monospace;
+        }
+
+        .node.active {
+            border-color: var(--primary);
+            box-shadow: var(--active-glow);
+            transform: scale(1.05);
+            background: #eff6ff;
+        }
+
+        .connection {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            flex: 1;
+            min-width: 100px;
+            max-width: 250px;
+            position: relative;
+        }
+
+        .connection-label {
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: var(--text-muted);
+            margin-bottom: 10px;
+            text-align: center;
+            font-family: monospace;
+            background: var(--code-bg);
+            padding: 4px 10px;
+            border-radius: 10px;
+            transition: color 0.3s ease;
+            white-space: nowrap;
+        }
+        
+        .connection-label.active {
+            color: var(--primary);
+            text-shadow: 0 0 8px rgba(59, 130, 246, 0.3);
+            border: 1px solid #bfdbfe;
+            background: #eff6ff;
+        }
+
+        .line-container {
+            width: 100%;
+            height: 4px;
+            background: #e2e8f0;
+            position: relative;
+            border-radius: 2px;
+            overflow: hidden;
+        }
+
+        .pulse {
+            position: absolute;
+            top: 0;
+            height: 100%;
+            width: 30%;
+            background: var(--primary);
+            box-shadow: 0 0 10px var(--primary), 0 0 20px var(--primary);
+            border-radius: 2px;
+            opacity: 0;
+        }
+
+        @keyframes moveForward {
+            0% { left: -30%; opacity: 1; }
+            100% { left: 100%; opacity: 1; }
+        }
+
+        @keyframes moveBackward {
+            0% { right: -30%; opacity: 1; }
+            100% { right: 100%; opacity: 1; }
+        }
+
+        .pulse.fwd-active {
+            animation: moveForward 0.8s linear forwards;
+        }
+
+        .pulse.bwd-active {
+            animation: moveBackward 0.8s linear forwards;
+        }
+
+        /* --- Trace Log Styles --- */
+        .trace-container {
+            width: 100%;
+            max-width: 1000px;
+            background: #ffffff;
+            border: 1px solid var(--card-border);
+            border-radius: 12px;
+            margin-bottom: 50px;
+            overflow: hidden;
+            font-family: monospace;
+            display: none;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.05);
+        }
+        
+        .trace-header {
+            background: #f8fafc;
+            padding: 10px 15px;
+            font-weight: 700;
+            font-size: 0.9rem;
+            color: #334155;
+            border-bottom: 1px solid var(--card-border);
+        }
+        
+        .trace-body {
+            padding: 15px;
+            min-height: 120px;
+            max-height: 250px;
+            overflow-y: auto;
+            font-size: 0.85rem;
+            color: #475569;
+        }
+        
+        .trace-entry {
+            margin-bottom: 10px;
+            opacity: 0;
+            transform: translateY(10px);
+            animation: slideIn 0.3s forwards;
+            word-break: break-all;
+            line-height: 1.4;
+        }
+        
+        @keyframes slideIn {
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .trace-entry.client { color: #16a34a; } /* green */
+        .trace-entry.gateway { color: #d97706; } /* yellow/orange */
+        .trace-entry.service { color: #2563eb; } /* blue */
+
+        /* --- Dashboard Grid --- */
+        .dashboard {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+            gap: 24px;
+            width: 100%;
+            max-width: 1400px;
+        }
+
+        .card {
+            background: #ffffff;
+            border: 1px solid var(--card-border);
+            border-radius: 16px;
+            padding: 24px;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            display: flex;
+            flex-direction: column;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1);
+            border-color: #cbd5e1;
+        }
+
+        .card-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 16px;
+        }
+
+        .card-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 10px;
+            background: var(--primary-gradient);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 16px;
+            font-size: 1.2rem;
+            color: white;
+            box-shadow: 0 4px 10px rgba(59, 130, 246, 0.3);
+        }
+
+        .card-title {
+            font-size: 1.25rem;
+            font-weight: 700;
+            margin: 0;
+            color: var(--text-main);
+        }
+
+        .route-info {
+            background: #f8fafc;
+            border-radius: 8px;
+            padding: 12px;
+            margin-bottom: 20px;
+            border: 1px solid var(--card-border);
+        }
+
+        .route-step {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .route-label {
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: var(--primary);
+            font-weight: 800;
+        }
+
+        .route-url {
+            font-family: monospace;
+            font-size: 0.85rem;
+            background: #ffffff;
+            padding: 6px 8px;
+            border-radius: 4px;
+            color: #334155;
+            border: 1px solid var(--card-border);
+            white-space: nowrap;
+            overflow-x: auto;
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+        
+        .route-url::-webkit-scrollbar {
+            display: none;
+        }
+        
+        .input-group {
+            margin-bottom: 16px;
+        }
+
+        label {
+            display: block;
+            font-size: 0.85rem;
+            color: #475569;
+            margin-bottom: 8px;
+            font-weight: 600;
+        }
+
+        input {
+            width: 100%;
+            padding: 12px 16px;
+            background: #ffffff;
+            border: 1px solid #cbd5e1;
+            border-radius: 8px;
+            color: var(--text-main);
+            font-family: inherit;
+            font-size: 0.95rem;
+            transition: border-color 0.2s, box-shadow 0.2s;
+            box-sizing: border-box;
+        }
+
+        input:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2);
+        }
+
+        button {
+            width: 100%;
+            padding: 12px;
+            background: var(--primary-gradient);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-family: inherit;
+            font-weight: 600;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: opacity 0.2s, transform 0.1s, box-shadow 0.2s;
+            margin-top: auto;
+            box-shadow: 0 4px 6px rgba(59, 130, 246, 0.2);
+        }
+
+        button:hover {
+            opacity: 0.95;
+            box-shadow: 0 6px 10px rgba(59, 130, 246, 0.3);
+        }
+
+        button:active {
+            transform: scale(0.98);
+        }
+        
+        button:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            box-shadow: none;
+        }
+
+        .result-container {
+            margin-top: 20px;
+            padding: 16px;
+            background: #eff6ff;
+            border-radius: 8px;
+            font-family: monospace;
+            font-size: 0.9rem;
+            color: #047857;
+            min-height: 40px;
+            white-space: pre-wrap;
+            word-break: break-all;
+            display: none;
+            border-left: 4px solid #10b981;
+            box-shadow: inset 0 2px 4px 0 rgba(0, 0, 0, 0.05);
+        }
+        
+        .result-container.error {
+            background: #fef2f2;
+            color: #b91c1c;
+            border-left-color: #ef4444;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Microservices Gateway</h1>
+    <p class="subtitle">Demonstrating API Gateway routing to isolated REST Proxy backend services</p>
+
+    <!-- Interactive Architecture Diagram -->
+    <div class="architecture-diagram">
+        <div class="node" id="node-client">
+            <div class="icon">💻</div>
+            <div class="name">Web Client</div>
+            <div class="detail">Browser</div>
+        </div>
+        
+        <div class="connection">
+            <div class="connection-label" id="label-rest">REST / JSON</div>
+            <div class="line-container">
+                <div class="pulse" id="pulse-rest-fwd"></div>
+                <div class="pulse" id="pulse-rest-bwd" style="left: auto;"></div>
+            </div>
+        </div>
+        
+        <div class="node" id="node-gateway">
+            <div class="icon">🚪</div>
+            <div class="name">API Gateway</div>
+            <div class="detail">Port: 5001</div>
+        </div>
+        
+        <div class="connection">
+            <div class="connection-label" id="label-proxy">HTTP/REST Proxy</div>
+            <div class="line-container">
+                <div class="pulse" id="pulse-proxy-fwd"></div>
+                <div class="pulse" id="pulse-proxy-bwd" style="left: auto;"></div>
+            </div>
+        </div>
+        
+        <div class="node" id="node-backend">
+            <div class="icon" id="target-icon">⚙️</div>
+            <div class="name" id="target-name">Target Service</div>
+            <div class="detail" id="target-port">Standing By...</div>
+        </div>
+    </div>
+
+    <!-- Live Request Trace -->
+    <div class="trace-container" id="trace-container">
+        <div class="trace-header">Live Network Trace</div>
+        <div class="trace-body" id="trace-body"></div>
+    </div>
+
+    <div class="dashboard">
+        <!-- Catalog Service -->
+        <div class="card">
+            <div class="card-header">
+                <div class="card-icon">📦</div>
+                <h2 class="card-title">Catalog Service</h2>
+            </div>
+            
+            <div class="route-info">
+                <div class="route-step">
+                    <span class="route-label">Gateway API (REST)</span>
+                    <code class="route-url" id="url-catalog-gw">GET /catalog/{id}</code>
+                </div>
+                <div class="route-step" style="margin-top: 10px;">
+                    <span class="route-label">Backend API (REST)</span>
+                    <code class="route-url">GET /catalog/{id}</code>
+                </div>
+            </div>
+
+            <div class="input-group">
+                <label for="catalog-id">Item ID</label>
+                <input type="number" id="catalog-id" value="1" placeholder="Enter Item ID">
+            </div>
+            <button id="btn-catalog" onclick="executeWorkflow('catalog')">Send Request</button>
+            <div class="result-container" id="catalog-result"></div>
+        </div>
+
+        <!-- Order Service -->
+        <div class="card">
+            <div class="card-header">
+                <div class="card-icon">🛒</div>
+                <h2 class="card-title">Order Service</h2>
+            </div>
+
+            <div class="route-info">
+                <div class="route-step">
+                    <span class="route-label">Gateway API (REST)</span>
+                    <code class="route-url" id="url-order-gw">POST /order</code>
+                </div>
+                <div class="route-step" style="margin-top: 10px;">
+                    <span class="route-label">Backend API (REST)</span>
+                    <code class="route-url">POST /order</code>
+                </div>
+            </div>
+
+            <div class="input-group">
+                <label for="order-item-id">Item ID (For POST)</label>
+                <input type="number" id="order-item-id" value="1" placeholder="Enter Item ID">
+            </div>
+            <div class="input-group">
+                <label for="order-qty">Quantity (For POST)</label>
+                <input type="number" id="order-qty" value="2" placeholder="Enter Quantity">
+            </div>
+            <button id="btn-order" onclick="executeWorkflow('order')">Create Order</button>
+
+            <hr style="border: 1px solid rgba(255,255,255,0.1); margin: 15px 0;">
+
+            <div class="input-group">
+                <label for="order-id-get">Order ID (For GET)</label>
+                <input type="number" id="order-id-get" value="12345" placeholder="Enter Order ID">
+            </div>
+            <button id="btn-order-get" onclick="executeWorkflow('order-get')">Get Order</button>
+
+            <div class="result-container" id="order-result"></div>
+        </div>
+
+        <!-- Inventory Service -->
+        <div class="card">
+            <div class="card-header">
+                <div class="card-icon">🏭</div>
+                <h2 class="card-title">Inventory Service</h2>
+            </div>
+
+            <div class="route-info">
+                <div class="route-step">
+                    <span class="route-label">Gateway API (REST)</span>
+                    <code class="route-url" id="url-inventory-gw">GET /inventory/{id}</code>
+                </div>
+                <div class="route-step" style="margin-top: 10px;">
+                    <span class="route-label">Backend API (REST)</span>
+                    <code class="route-url">GET /inventory/{id}</code>
+                </div>
+            </div>
+
+            <div class="input-group">
+                <label for="inventory-id">Item ID</label>
+                <input type="number" id="inventory-id" value="1" placeholder="Enter Item ID">
+            </div>
+            <button id="btn-inventory" onclick="executeWorkflow('inventory')">Send Request</button>
+            <div class="result-container" id="inventory-result"></div>
+        </div>
+
+        <!-- User Service -->
+        <div class="card">
+            <div class="card-header">
+                <div class="card-icon">👤</div>
+                <h2 class="card-title">User Service</h2>
+            </div>
+
+            <div class="route-info">
+                <div class="route-step">
+                    <span class="route-label">Gateway API (REST)</span>
+                    <code class="route-url" id="url-user-gw">GET /user/{id}</code>
+                </div>
+                <div class="route-step" style="margin-top: 10px;">
+                    <span class="route-label">Backend API (REST)</span>
+                    <code class="route-url">GET /user/{id}</code>
+                </div>
+            </div>
+
+            <div class="input-group">
+                <label for="user-id">User ID</label>
+                <input type="number" id="user-id" value="42" placeholder="Enter User ID">
+            </div>
+            <button id="btn-user" onclick="executeWorkflow('user')">Send Request</button>
+            <div class="result-container" id="user-result"></div>
+        </div>
+    </div>
+
+    <script>
+        // Sleep helper
+        const sleep = ms => new Promise(r => setTimeout(r, ms));
+
+        // Disable all buttons during animation
+        function setButtonsState(disabled) {
+            document.querySelectorAll('button').forEach(b => b.disabled = disabled);
+        }
+
+        // Reset all nodes and pulses
+        function resetDiagram() {
+            document.querySelectorAll('.node, .connection-label').forEach(el => el.classList.remove('active'));
+            document.querySelectorAll('.pulse').forEach(el => {
+                el.classList.remove('fwd-active');
+                el.classList.remove('bwd-active');
+            });
+        }
+
+        // The core workflow animation engine
+        async function runVisualWorkflow(targetConfig) {
+            resetDiagram();
+            
+            const traceBody = document.getElementById('trace-body');
+            document.getElementById('trace-container').style.display = 'block';
+            traceBody.innerHTML = '';
+            
+            const logTrace = (type, prefix, msg) => {
+                const entry = document.createElement('div');
+                entry.className = `trace-entry ${type}`;
+                entry.innerHTML = `<strong>[${prefix}]</strong> ${msg}`;
+                traceBody.appendChild(entry);
+                traceBody.scrollTop = traceBody.scrollHeight;
+            };
+            
+            // Setup target service info
+            document.getElementById('target-icon').textContent = targetConfig.icon;
+            document.getElementById('target-name').textContent = targetConfig.name;
+            document.getElementById('target-port').textContent = targetConfig.port;
+
+            // 1. Client initiates
+            document.getElementById('node-client').classList.add('active');
+            const [method, path] = targetConfig.restLabel.split(' ');
+            const fullUrl = `${method} ${window.location.origin}${path}`;
+            logTrace('client', 'Web Client', `Initiating Request: <strong>${fullUrl}</strong> (to Gateway)`);
+            if (targetConfig.body) {
+                logTrace('client', 'Web Client', `Request Payload: <code>${JSON.stringify(targetConfig.body)}</code>`);
+            }
+            await sleep(500);
+
+            // 2. REST request to Gateway
+            document.getElementById('label-rest').classList.add('active');
+            document.getElementById('label-rest').textContent = targetConfig.restLabel;
+            
+            const pRestFwd = document.getElementById('pulse-rest-fwd');
+            pRestFwd.classList.remove('fwd-active');
+            void pRestFwd.offsetWidth; // trigger reflow
+            pRestFwd.classList.add('fwd-active');
+            
+            await sleep(800);
+            document.getElementById('label-rest').classList.remove('active');
+            document.getElementById('node-client').classList.remove('active');
+            
+            // 3. Gateway processes and initiates REST Proxy
+            document.getElementById('node-gateway').classList.add('active');
+            logTrace('gateway', 'API Gateway', `Received request. Evaluating YARP routing rules for path <code>${targetConfig.proxyPath}</code>...`);
+            await sleep(600);
+            logTrace('gateway', 'API Gateway', `Match found! Proxying request to Downstream Service at: <code>${targetConfig.targetHost}${targetConfig.proxyPath}</code>`);
+
+            // 4. Proxy request to Backend
+            document.getElementById('label-proxy').classList.add('active');
+            document.getElementById('label-proxy').textContent = targetConfig.proxyLabel;
+            
+            const pProxyFwd = document.getElementById('pulse-proxy-fwd');
+            pProxyFwd.classList.remove('fwd-active');
+            void pProxyFwd.offsetWidth;
+            pProxyFwd.classList.add('fwd-active');
+            
+            await sleep(800);
+            document.getElementById('label-proxy').classList.remove('active');
+            document.getElementById('node-gateway').classList.remove('active');
+
+            // 5. Backend receives and processes
+            document.getElementById('node-backend').classList.add('active');
+            logTrace('service', targetConfig.name, `Received proxied request.`);
+            logTrace('service', targetConfig.name, `Processing business logic and interacting with database...`);
+            
+            // Execute ACTUAL fetch here while backend is "processing" visually
+            let fetchResult = null;
+            let fetchError = null;
+            try {
+                const response = await targetConfig.fetchCall();
+                if(!response.ok) throw new Error(`HTTP ${response.status}`);
+                fetchResult = await response.json();
+            } catch(e) {
+                fetchError = e;
+            }
+            
+            // Ensure processing animation takes at least 1s
+            await sleep(1500);
+            
+            let resultDataStr = fetchResult ? JSON.stringify(fetchResult) : (fetchError ? fetchError.message : 'Error');
+            logTrace('service', targetConfig.name, `Processing complete. Returning HTTP 200 OK JSON response: <code>${resultDataStr}</code>`);
+
+            // 6. Backend Response
+            document.getElementById('label-proxy').classList.add('active');
+            document.getElementById('label-proxy').textContent = 'JSON Response';
+            
+            const pProxyBwd = document.getElementById('pulse-proxy-bwd');
+            pProxyBwd.classList.remove('bwd-active');
+            void pProxyBwd.offsetWidth;
+            pProxyBwd.classList.add('bwd-active');
+
+            await sleep(800);
+            document.getElementById('label-proxy').classList.remove('active');
+            document.getElementById('node-backend').classList.remove('active');
+
+            // 7. Gateway receives and converts
+            document.getElementById('node-gateway').classList.add('active');
+            logTrace('gateway', 'API Gateway', `Received JSON response from downstream. Forwarding transparently back to client...`);
+            await sleep(600);
+
+            // 8. REST Response
+            document.getElementById('label-rest').classList.add('active');
+            document.getElementById('label-rest').textContent = 'JSON Response';
+            
+            const pRestBwd = document.getElementById('pulse-rest-bwd');
+            pRestBwd.classList.remove('bwd-active');
+            void pRestBwd.offsetWidth;
+            pRestBwd.classList.add('bwd-active');
+
+            await sleep(800);
+            document.getElementById('label-rest').classList.remove('active');
+            document.getElementById('node-gateway').classList.remove('active');
+
+            // 9. Client receives
+            document.getElementById('node-client').classList.add('active');
+            logTrace('client', 'Web Client', `Gateway delivered final Response Payload: <br/><code style="color: #4ade80;">${resultDataStr}</code>`);
+            await sleep(800);
+            document.getElementById('node-client').classList.remove('active');
+
+            return { data: fetchResult, error: fetchError };
+        }
+
+        async function executeWorkflow(serviceType) {
+            setButtonsState(true);
+            
+            // Hide all results
+            document.querySelectorAll('.result-container').forEach(el => el.style.display = 'none');
+            
+            let targetConfig = {};
+            let resElId = `${serviceType}-result`;
+            if (serviceType === 'order-get') resElId = 'order-result';
+            const resEl = document.getElementById(resElId);
+            resEl.style.display = 'block';
+            resEl.className = 'result-container';
+            resEl.textContent = 'Awaiting response...';
+
+            if (serviceType === 'catalog') {
+                const id = document.getElementById('catalog-id').value || 1;
+                document.getElementById('url-catalog-gw').textContent = `GET /catalog/${id}`;
+                targetConfig = {
+                    name: 'Catalog Service',
+                    icon: '📦',
+                    port: 'Port: 5011',
+                    targetHost: 'https://localhost:5011',
+                    proxyPath: `/catalog/${id}`,
+                    restLabel: `GET /catalog/${id}`,
+                    proxyLabel: `GET /catalog/${id}`,
+                    fetchCall: () => fetch(`/catalog/${id}`)
+                };
+            } 
+            else if (serviceType === 'order') {
+                const itemId = parseInt(document.getElementById('order-item-id').value || 1);
+                const quantity = parseInt(document.getElementById('order-qty').value || 2);
+                document.getElementById('url-order-gw').textContent = `POST /order`;
+                const bodyObj = { itemId, quantity };
+                targetConfig = {
+                    name: 'Order Service',
+                    icon: '🛒',
+                    port: 'Port: 5021',
+                    targetHost: 'https://localhost:5021',
+                    proxyPath: `/order`,
+                    body: bodyObj,
+                    restLabel: `POST /order`,
+                    proxyLabel: `POST /order`,
+                    fetchCall: () => fetch(`/order`, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(bodyObj)
+                    })
+                };
+            }
+            else if (serviceType === 'order-get') {
+                const id = document.getElementById('order-id-get').value || 12345;
+                document.getElementById('url-order-gw').textContent = `GET /order/${id}`;
+                targetConfig = {
+                    name: 'Order Service',
+                    icon: '🛒',
+                    port: 'Port: 5021',
+                    targetHost: 'https://localhost:5021',
+                    proxyPath: `/order/${id}`,
+                    restLabel: `GET /order/${id}`,
+                    proxyLabel: `GET /order/${id}`,
+                    fetchCall: () => fetch(`/order/${id}`)
+                };
+            }
+            else if (serviceType === 'inventory') {
+                const id = document.getElementById('inventory-id').value || 1;
+                document.getElementById('url-inventory-gw').textContent = `GET /inventory/${id}`;
+                targetConfig = {
+                    name: 'Inventory Service',
+                    icon: '🏭',
+                    port: 'Port: 5031',
+                    targetHost: 'https://localhost:5031',
+                    proxyPath: `/inventory/${id}`,
+                    restLabel: `GET /inventory/${id}`,
+                    proxyLabel: `GET /inventory/${id}`,
+                    fetchCall: () => fetch(`/inventory/${id}`)
+                };
+            }
+            else if (serviceType === 'user') {
+                const id = document.getElementById('user-id').value || 42;
+                document.getElementById('url-user-gw').textContent = `GET /user/${id}`;
+                targetConfig = {
+                    name: 'User Service',
+                    icon: '👤',
+                    port: 'Port: 5041',
+                    targetHost: 'https://localhost:5041',
+                    proxyPath: `/user/${id}`,
+                    restLabel: `GET /user/${id}`,
+                    proxyLabel: `GET /user/${id}`,
+                    fetchCall: () => fetch(`/user/${id}`)
+                };
+            }
+
+            // Run the animation and wait for result
+            const result = await runVisualWorkflow(targetConfig);
+
+            // Display result
+            if (result.error) {
+                resEl.className = 'result-container error';
+                resEl.textContent = result.error.message;
+            } else {
+                resEl.textContent = JSON.stringify(result.data, null, 2);
+            }
+
+            setButtonsState(false);
+        }
+    </script>
+</body>
+</html>
